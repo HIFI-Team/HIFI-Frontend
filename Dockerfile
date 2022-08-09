@@ -7,8 +7,7 @@ WORKDIR /app
 #copies package.json and package-lock.json to Docker environment
 COPY package*.json ./
 # Installs all node packages
-RUN npm ci --only=production
-# RUN npm ci
+RUN npm ci
 
 # Copies everything over to Docker environment
 COPY . ./
