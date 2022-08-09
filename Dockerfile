@@ -27,6 +27,6 @@ RUN rm -rf ./usr/share/nginx/html/*
 # Copies static resources from builder stage
 COPY --from=builder /app/build /usr/share/nginx/html/
 # Containers run nginx with global directives and daemon off
-# EXPOSE 3000
+EXPOSE 3000
 
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
