@@ -5,10 +5,10 @@ WORKDIR /app
 
 # install app dependencies
 #copies package.json and package-lock.json to Docker environment
-COPY package-lock.json ./
-COPY package.json ./
+COPY package*.json ./
 # Installs all node packages
-RUN npm ci 
+RUN npm ci
+# RUN npm ci --only=production
 
 # Copies everything over to Docker environment
 COPY . ./
