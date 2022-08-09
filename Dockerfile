@@ -1,4 +1,4 @@
-FROM node:16 AS builder
+FROM node:alpine AS builder
 
 # set working directory
 WORKDIR /app
@@ -7,7 +7,8 @@ WORKDIR /app
 #copies package.json and package-lock.json to Docker environment
 COPY package*.json ./
 # Installs all node packages
-RUN npm ci
+#RUN npm ci
+RUN npm install --force
 
 # Copies everything over to Docker environment
 COPY . ./
