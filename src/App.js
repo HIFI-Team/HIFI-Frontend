@@ -4,7 +4,7 @@ import Home from './pages/common/Home';
 import NotFound from './pages/common/NotFound';
 import Join from './pages/auth/Join';
 import Login from './pages/auth/Login';
-
+import Store from './pages/store/Store';
 function App() {
   return (
     <Routes>
@@ -12,6 +12,7 @@ function App() {
       <Route path="/user" element={<Home />} />
       <Route path="/join" element={<Join />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/store" element={<Store />} />
 
       <Route path="/error" element={<NotFound />} />
       <Route path="*" element={<Navigate to="/error" />} />

@@ -12,6 +12,7 @@ const Home = () => {
       <button onClick={() => navigate('/login')}>로그인</button>
       <button onClick={() => navigate('/join')}>회원가입</button>
       <button onClick={() => navigate('/user')}>내 정보</button>
+      <button onClick={() => navigate('/store')}>지도</button>
     </>
   );
 };
