@@ -14,16 +14,35 @@ function Profile() {
     headers: {
       Authorization:
         `Bearer ` +
-        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJoaWZpIiwiaWF0IjoxNjYwNTc3MjY5LCJzdWIiOiIxIiwicm9sZSI6IlJPTEVfVVNFUiIsImV4cCI6MTY2MDU3OTA2OX0._bAy1JE2fUybV2R8mn4fdS_dWiSbHPomtWodgk_AH47HQX0FuTWlcJnhDPT6KRkF6uz9O7oRqXsggjUOU4zQug',
+        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJoaWZpIiwiaWF0IjoxNjYwNjk0ODY5LCJzdWIiOiIxIiwicm9sZSI6IlJPTEVfVVNFUiIsImV4cCI6MTY2MDY5NjY2OX0.ONgXVhbE_uDY7Ovj_7IZFwRNhPw1fgcbkPKr3hyCxSfH3Ih7s00wlgj_feTVbwGUzh3D5OsGoB8x8PV_HB3K-g',
     },
   };
-  const onClick = async () => {
+  const refresh = async () => {
     try {
       const response = await axios.get(
         'http://localhost:8000/user/profile',
         config
       );
       setProfile(response.data.response);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const submitHandler = e => {
+    e.preventDefault();
+    const profileDto = { name, description, image, anonymous };
+    try {
+      const request = axios.post(
+        'http://localhost:8000/user/update',
+        {
+          'name': 'test',
+          'description': profileDto.description,
+          'image': profileDto.image,
+          'anonymous': profileDto.anonymous,
+        },
+        config
+      );
+      console.log(request);
     } catch (e) {
       console.log(e);
     }
@@ -44,15 +63,11 @@ function Profile() {
     e.preventDefault();
     setAnonymous(e.target.value);
   };
-  const submitHandler = e => {
-    e.preventDefault();
-    const profileDto = { name, description, image, anonymous };
-  };
   return (
     <div>
       <NavBar />
       <h1>회원님의 프로필</h1>
-      <button onClick={onClick}>테스트</button>
+      <button onClick={refresh}>확인</button>
       {profile && (
         <textarea
           rows={7}
@@ -97,7 +112,7 @@ function Profile() {
           placeholder="비공개 여부"
         />
         <br />
-        <button type="submit">프로필 변경</button>
+        <button onClick={submitHandler}>변경</button>
       </form>
     </div>
   );
