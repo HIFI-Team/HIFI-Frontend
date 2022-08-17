@@ -14,7 +14,7 @@ function Profile() {
     headers: {
       Authorization:
         `Bearer ` +
-        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJoaWZpIiwiaWF0IjoxNjYwNjk0ODY5LCJzdWIiOiIxIiwicm9sZSI6IlJPTEVfVVNFUiIsImV4cCI6MTY2MDY5NjY2OX0.ONgXVhbE_uDY7Ovj_7IZFwRNhPw1fgcbkPKr3hyCxSfH3Ih7s00wlgj_feTVbwGUzh3D5OsGoB8x8PV_HB3K-g',
+        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJoaWZpIiwiaWF0IjoxNjYwNjk5NTQ3LCJzdWIiOiIxIiwicm9sZSI6IlJPTEVfVVNFUiIsImV4cCI6MTY2MDcwMTM0N30.GT2haSS9HOLPetuYUwelDjsZuyTIBZsrSt9ytp7iJ5heYe_-HnD5stP2q0xEUGRkJCkLU-Z45VDu5bfiFrJxxQ',
     },
   };
   const refresh = async () => {
@@ -35,10 +35,10 @@ function Profile() {
       const request = axios.post(
         'http://localhost:8000/user/update',
         {
-          'name': 'test',
-          'description': profileDto.description,
-          'image': profileDto.image,
-          'anonymous': profileDto.anonymous,
+          name: 'test',
+          description: profileDto.description,
+          image: profileDto.image,
+          anonymous: profileDto.anonymous,
         },
         config
       );
@@ -75,6 +75,8 @@ function Profile() {
           readOnly={true}
         />
       )}
+      <br />
+      <br />
       <form onSubmit={submitHandler}>
         <label for="name">이름</label>
         <input
