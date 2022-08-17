@@ -14,7 +14,7 @@ function Profile() {
     headers: {
       Authorization:
         `Bearer ` +
-        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJoaWZpIiwiaWF0IjoxNjYwNjk5NTQ3LCJzdWIiOiIxIiwicm9sZSI6IlJPTEVfVVNFUiIsImV4cCI6MTY2MDcwMTM0N30.GT2haSS9HOLPetuYUwelDjsZuyTIBZsrSt9ytp7iJ5heYe_-HnD5stP2q0xEUGRkJCkLU-Z45VDu5bfiFrJxxQ',
+        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJoaWZpIiwiaWF0IjoxNjYwNzA4OTM5LCJzdWIiOiIxIiwicm9sZSI6IlJPTEVfVVNFUiIsImV4cCI6MTY2MDcxMDczOX0.BrhHx0IuVOFTOR6HzmIeINVQeJ-VPZJGRoj0Z6lnsvLnZ_RMLbBOrgeqaz_msYucUEF6l2_TcB6NJW2sDuC81w',
     },
   };
   const refresh = async () => {
@@ -35,7 +35,7 @@ function Profile() {
       const request = axios.post(
         'http://localhost:8000/user/update',
         {
-          name: 'test',
+          name: profileDto.name,
           description: profileDto.description,
           image: profileDto.image,
           anonymous: profileDto.anonymous,
@@ -49,7 +49,7 @@ function Profile() {
   };
   const nameHandler = e => {
     e.preventDefault();
-    setProfile(e.target.value);
+    setName(e.target.value);
   };
   const descriptionHandler = e => {
     e.preventDefault();
@@ -118,41 +118,4 @@ function Profile() {
     </div>
   );
 }
-// const Profile = () => {
-//   const [profile, setProfile] = useState(null);
-//   const [loading, setLoading] = useState(false);
-//   const config = {
-//     headers: {
-//       Authorization:
-//         `Bearer ` +
-//         'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJoaWZpIiwiaWF0IjoxNjYwMzEwNDEyLCJzdWIiOiIxIiwicm9sZSI6IlJPTEVfVVNFUiIsImV4cCI6MTY2MDMxMjIxMn0.BcIWk1WQndFKvvtykzS-Zv6uEVnJCqtuqPC8RaO1F3q1ovZdENq9srWTm1gxjc2_QCLWyAOgg6WVCyIDdiXjlw',
-//     },
-//   };
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       setLoading(true);
-//
-//       try {
-//         const response = await axios.get(
-//           'http://localhost:8000/user/profile',
-//           config
-//         );
-//         setProfile(response.data.response);
-//       } catch (e) {
-//         console.log(e);
-//       }
-//       setLoading(false);
-//     };
-//
-//     fetchData();
-//   }, []);
-//
-//   if (loading) {
-//     return <ProfileDto>로딩중</ProfileDto>;
-//   }
-//   if (!profile) {
-//     return null;
-//   }
-//   return <ProfileDto>{profile}</ProfileDto>;
-// };
 export default Profile;
