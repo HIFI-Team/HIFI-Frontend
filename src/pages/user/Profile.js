@@ -76,7 +76,6 @@ function Profile() {
         />
       )}
       <br />
-      <br />
       <form onSubmit={submitHandler}>
         <label for="name">이름</label>
         <input
