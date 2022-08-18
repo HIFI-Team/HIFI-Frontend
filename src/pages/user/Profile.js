@@ -10,6 +10,8 @@ function Profile() {
   const [image, setImage] = useState('');
   const [anonymous, setAnonymous] = useState('');
 
+  const profileTest = ['name', 'description', 'image', 'anonymous'];
+
   const config = {
     headers: {
       Authorization:
@@ -71,7 +73,7 @@ function Profile() {
       {profile && (
         <textarea
           rows={7}
-          value={JSON.stringify(profile, null, 2)}
+          value={JSON.stringify(profile, profileTest, 2)}
           readOnly={true}
         />
       )}
