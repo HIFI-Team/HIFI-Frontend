@@ -1,10 +1,9 @@
 import axios from 'axios';
 const StoreApi = {
-  requestMap: async body => {
-    const data = await axios.get('https://api.hifihifi.site/store', body);
+	requestMap: async () => {
+		const response = axios.get('http://localhost:8000/store');
 
-    console.log(data);
-    return data;
-  },
+		return (await response).data;
+	},
 };
 export default StoreApi;

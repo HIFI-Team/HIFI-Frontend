@@ -1,20 +1,43 @@
-import React, { useEffect } from 'react';
-import mapLoad from './mapScript';
+import React, { useState, useEffect } from 'react';
+import StoreApi from '../../apis/StoreApi';
+import mapScript from './mapScript';
 
 const Store = () => {
-  useEffect(() => {
-    mapLoad();
-  }, []);
+	const [mapData, setMapData] = useState([
+		{
+			address_name: '',
+			categoryCode: '',
+			description: null,
+			grade: 0,
+			images: null,
+			name: '',
+			uid: '',
+		},
+	]);
+	useEffect(() => {
+		getData();
+	}, []);
+	useEffect(() => {
+		console.log(mapData);
+		mapScript(mapData);
+	}, [mapData]);
 
-  return (
-    <div
-      id="map"
-      style={{
-        width: '100%',
-        height: '60vh',
-      }}
-    ></div>
-  );
+	const promise = StoreApi.requestMap();
+	const getData = () => {
+		promise.then(appData => {
+			setMapData(appData);
+		});
+	};
+
+	return (
+		<div
+			id="map"
+			style={{
+				width: '100%',
+				height: '60vh',
+			}}
+		/>
+	);
 };
 
 export default Store;
