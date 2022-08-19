@@ -15,19 +15,13 @@ const Store = () => {
 		},
 	]);
 	useEffect(() => {
-		getData();
+		setData();
 	}, []);
-	useEffect(() => {
-		mapScript(mapData);
-	}, [mapData]);
-
-	const getData = () => {
-		const promise = StoreApi.requestMap();
-		promise.then(appData => {
-			setMapData(appData);
-		});
+	const setData = async () => {
+		const data = await StoreApi.requestMap();
+		setMapData(data);
+		mapScript(data);
 	};
-
 	return (
 		<div
 			id="map"
