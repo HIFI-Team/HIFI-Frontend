@@ -1,4 +1,5 @@
 const { kakao } = window;
+// const { location } = window;
 const infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
 
 const displayMarker = function (map, coords, el) {
@@ -19,8 +20,10 @@ const displayMarker = function (map, coords, el) {
 		infowindow.close();
 	});
 	kakao.maps.event.addListener(marker, 'click', function () {
-		const roadFind = 'https://map.kakao.com/link/to/' + el.uid;
-		window.open(roadFind);
+		// const roadFind = 'https://map.kakao.com/link/to/' + el.uid;
+		// window.open(roadFind);
+		const reviewFind = 'http;//localhose:8000/store/1';
+		window.location.href = reviewFind;
 	});
 };
 const mapScript = data => {
