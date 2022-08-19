@@ -1,7 +1,7 @@
 const { kakao } = window;
-// const { location } = window;
 const infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
 
+/** 마커 등록 함수 */
 const displayMarker = function (map, coords, el) {
 	const marker = new kakao.maps.Marker({
 		map: map,
@@ -26,8 +26,9 @@ const displayMarker = function (map, coords, el) {
 		window.location.href = reviewFind;
 	});
 };
+
+/**지도 호출 함수*/
 const mapScript = data => {
-	console.log(kakao);
 	const container = document.getElementById('map');
 	const options = {
 		center: new kakao.maps.LatLng(37.5515814, 126.9249751),
@@ -37,15 +38,14 @@ const mapScript = data => {
 	const geocoder = new kakao.maps.services.Geocoder();
 	console.log(data);
 	data.forEach(el => {
-		console.log(el.address_name);
 		geocoder.addressSearch(el.address_name, function (result, status) {
 			console.log(status);
 			if (status === kakao.maps.services.Status.OK) {
-				// console.log(el);
 				let coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 				displayMarker(map, coords, el);
 			}
 		});
 	});
+	return map;
 };
 export default mapScript;
