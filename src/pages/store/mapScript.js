@@ -7,8 +7,11 @@ const displayMarker = function (map, coords, el) {
 		position: coords,
 	});
 	kakao.maps.event.addListener(marker, 'mouseover', function () {
+		console.log(el.name);
 		// 마커를 마우스오버 이벤트가 발생하면 장소명이 인포윈도우에 표출됩니다.
-		infowindow.setContent('<div style="padding:5px;font-size:12px;">', `${el.name}`, '</div>');
+		infowindow.setContent(
+			'<div style="padding:5px;font-size:12px;text-align:right;">' + el.name + '</div>',
+		);
 		infowindow.open(map, marker);
 	});
 	kakao.maps.event.addListener(marker, 'mouseout', function () {
@@ -16,7 +19,7 @@ const displayMarker = function (map, coords, el) {
 		infowindow.close();
 	});
 	kakao.maps.event.addListener(marker, 'click', function () {
-		const roadFind = 'https://map.kakao.com/link/to/';
+		const roadFind = 'https://map.kakao.com/link/to/' + el.uid;
 		window.open(roadFind);
 	});
 };
@@ -32,8 +35,10 @@ const mapScript = data => {
 	console.log(data);
 	data.forEach(el => {
 		console.log(el.address_name);
-		geocoder.addressSearch(el, function (result, status) {
+		geocoder.addressSearch(el.address_name, function (result, status) {
+			console.log(status);
 			if (status === kakao.maps.services.Status.OK) {
+				// console.log(el);
 				let coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 				displayMarker(map, coords, el);
 			}

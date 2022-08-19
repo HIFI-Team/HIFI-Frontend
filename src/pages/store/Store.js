@@ -18,12 +18,11 @@ const Store = () => {
 		getData();
 	}, []);
 	useEffect(() => {
-		console.log(mapData);
 		mapScript(mapData);
 	}, [mapData]);
 
-	const promise = StoreApi.requestMap();
 	const getData = () => {
+		const promise = StoreApi.requestMap();
 		promise.then(appData => {
 			setMapData(appData);
 		});
