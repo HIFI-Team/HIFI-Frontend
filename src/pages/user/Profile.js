@@ -4,19 +4,18 @@ import NavBar from '../../components/NavBar';
 import ProfileDto from '../../components/ProfileDto';
 
 function Profile() {
-  const [profile, setProfile] = useState(null);
+  let [profile, setProfile] = useState(null);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [image, setImage] = useState('');
   const [anonymous, setAnonymous] = useState('');
 
   const profileTest = ['name', 'description', 'image', 'anonymous'];
-
   const config = {
     headers: {
       Authorization:
         `Bearer ` +
-        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJoaWZpIiwiaWF0IjoxNjYxMDA0NDg4LCJzdWIiOiI0Iiwicm9sZSI6IlJPTEVfVVNFUiIsImV4cCI6MTY2MTAwNjI4OH0._QcdyRkoGYx8U3SraD41JczIK9VPPZJkKlJVssShNe4rTYDJb4mcCrcMtW2IcgStk1NB54keGjnlRuQC7eyuJA',
+        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJoaWZpIiwiaWF0IjoxNjYxMDEyNjkzLCJzdWIiOiI0Iiwicm9sZSI6IlJPTEVfVVNFUiIsImV4cCI6MTY2MTAxNDQ5M30.G3TPHI_4WOupCTRsmiffXYgFkYiEeXHaXCOBQbmSdl3YLKPJdgd0FIPyBQ9KefMYgGt0P0m5IMHQjGOxJn7ZdQ',
     },
   };
   const refresh = async () => {
@@ -25,9 +24,13 @@ function Profile() {
         'http://localhost:8000/user/profile',
         config
       );
-      setProfile(response.data);
+      setName(response.data.name);
+      setDescription(response.data.description);
+      setImage(response.data.image);
+      if (response.data.anonymous) setAnonymous('예');
+      else setAnonymous('아니오');
     } catch (e) {
-      console.log(e);
+      console.log(e, 'A');
     }
   };
   const submitHandler = async () => {
@@ -70,14 +73,13 @@ function Profile() {
   return (
     <div>
       <NavBar />
-      <h1>회원님의 프로필</h1>
-      {profile && (
-        <textarea
-          rows={7}
-          value={JSON.stringify(profile, profileTest, 2)}
-          readOnly={true}
-        />
-      )}
+      <h1>{name}님의 프로필</h1>
+      <h3>프로필 사진</h3>
+      {image}
+      <h3>소개</h3>
+      {description}
+      <h3>비공개 여부</h3>
+      {anonymous}
       <br />
       <br />
       <h1>프로필 변경하기</h1>
