@@ -16,7 +16,7 @@ function Profile() {
     headers: {
       Authorization:
         `Bearer ` +
-        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJoaWZpIiwiaWF0IjoxNjYwNzA4OTM5LCJzdWIiOiIxIiwicm9sZSI6IlJPTEVfVVNFUiIsImV4cCI6MTY2MDcxMDczOX0.BrhHx0IuVOFTOR6HzmIeINVQeJ-VPZJGRoj0Z6lnsvLnZ_RMLbBOrgeqaz_msYucUEF6l2_TcB6NJW2sDuC81w',
+        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJoaWZpIiwiaWF0IjoxNjYxMDA0NDg4LCJzdWIiOiI0Iiwicm9sZSI6IlJPTEVfVVNFUiIsImV4cCI6MTY2MTAwNjI4OH0._QcdyRkoGYx8U3SraD41JczIK9VPPZJkKlJVssShNe4rTYDJb4mcCrcMtW2IcgStk1NB54keGjnlRuQC7eyuJA',
     },
   };
   const refresh = async () => {
@@ -25,16 +25,15 @@ function Profile() {
         'http://localhost:8000/user/profile',
         config
       );
-      setProfile(response.data.response);
+      setProfile(response.data);
     } catch (e) {
       console.log(e);
     }
   };
-  const submitHandler = e => {
-    e.preventDefault();
+  const submitHandler = async () => {
     const profileDto = { name, description, image, anonymous };
     try {
-      const request = axios.post(
+      const request = await axios.post(
         'http://localhost:8000/user/update',
         {
           name: profileDto.name,
@@ -65,11 +64,13 @@ function Profile() {
     e.preventDefault();
     setAnonymous(e.target.value);
   };
+  useEffect(() => {
+    refresh();
+  }, []);
   return (
     <div>
       <NavBar />
       <h1>회원님의 프로필</h1>
-      <button onClick={refresh}>확인</button>
       {profile && (
         <textarea
           rows={7}
@@ -78,6 +79,8 @@ function Profile() {
         />
       )}
       <br />
+      <br />
+      <h1>프로필 변경하기</h1>
       <form onSubmit={submitHandler}>
         <label for="name">이름</label>
         <input
