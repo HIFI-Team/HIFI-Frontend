@@ -5,7 +5,7 @@ import Home from './pages/common/Home';
 import NotFound from './pages/common/NotFound';
 import Join from './pages/auth/Join';
 import Login from './pages/auth/Login';
-import Store from './pages/store/Store';
+import Maps from './pages/store/Maps';
 import StoreDetail from './pages/store/StoreDetail';
 function App() {
 	return (
@@ -14,7 +14,7 @@ function App() {
 			<Route path="/user" element={<Home />} />
 			<Route path="/join" element={<Join />} />
 			<Route path="/login" element={<Login />} />
-			<Route path="/store" element={<Store />} />
+			<Route path="/store" element={<Maps />} />
 			<Route exact path="/store/:storeId" element={<StoreDetail />} />
 			{/* <Route exact path="/store/:storeId" component={StoreDetail} /> */}
 			<Route path="/error" element={<NotFound />} />
