@@ -1,48 +1,38 @@
 import React, { useState } from 'react';
-// import { useSelector } from 'react-redux';
 import ReviewApi from '../../../apis/ReviewApi';
-import SingleReview from './SingleReview';
+import SingleReview from './Reply';
 import { useCookies } from 'react-cookie';
-// import Login from '../../auth/Login';
 
 export const Review = props => {
-	// const user = useSelector(state => state.user);
 	const storeId = props.postId;
-	const [reviewValue, setReviewValue] = useState('');
-	// const [cookies] = useCookies([Login.accessToken]);
-
-	// console.log(user);
+	const [content, setContent] = useState('');
+	const [newReview, setNewReview] = useState('');
 
 	const handleClick = event => {
-		setReviewValue(event.currentTarget.value);
+		setContent(event.currentTarget.value);
 	};
 
 	const onSubmit = event => {
 		//리다이렉트 안되도록
 		event.preventDefault();
 
-		const variable = {
-			content: reviewValue,
-			// user: useCookies,
-			postId: storeId,
-		};
+		setNewReview(props.newReview);
+		newReview.content = content;
 
-		console.log(variable);
+		console.log(newReview);
 
-		const saveReview = async variable => {
-			console.log('try save');
-			const response = await ReviewApi.requestSaveReview(variable);
-			if (response.data.success) {
-				setReviewValue('');
-				props.refreshFunction(response.data.result);
+		const saveReview = async () => {
+			const response = await ReviewApi.requestSaveReview(newReview);
+			if (response.status == 200) {
+				setContent('');
+				console.log(response);
+				props.refreshFunction();
 			} else {
 				alert('리뷰를 저장하지 못했습니다.');
 			}
 		};
 		saveReview();
 	};
-
-	console.log(props.ReviewLists);
 
 	return (
 		<div>
@@ -54,7 +44,7 @@ export const Review = props => {
 				<textarea
 					style={{ width: '100%', borderRadius: '10px', resize: 'none' }}
 					onChange={handleClick}
-					value={reviewValue}
+					value={content}
 					placeholder="리뷰를 작성해 주세요."
 				/>
 				<br />
@@ -72,13 +62,14 @@ export const Review = props => {
 				props.ReviewLists.map(
 					(review, index) =>
 						!review.responseTo && (
-							<React.Fragment>
-								<SingleReview
-									refreshFunction={props.refreshFunction}
-									review={review}
-									postId={storeId}
-								/>
-							</React.Fragment>
+							// <React.Fragment>
+							<SingleReview
+								key={index}
+								refreshFunction={props.refreshFunction}
+								review={review}
+								postId={storeId}
+							/>
+							// </React.Fragment>
 						),
 				)}
 		</div>

@@ -61,7 +61,7 @@ function SingleComment(props) {
 			{OpenReply && (
 				<form style={{ display: 'flex' }} onSubmit={onSubmit}>
 					<TextArea
-						style={{ width: '80%', borderRadius: '5px', marginLeft: '10px' }}
+						style={{ width: '80%', borderRadius: '5px', marginRight: '10px' }}
 						onChange={handleChange}
 						value={ReviewValue}
 						placeholder="write some reply"

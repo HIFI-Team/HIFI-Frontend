@@ -30,13 +30,14 @@ const Join = () => {
 			if (res.status === 200) {
 				console.log('로그인 성공');
 				const date = new Date();
-				const { accessToken } = res.data;
+				const { accessToken } = res.data.data;
 				setAccessToken('accessToken', accessToken, {
 					expires: new Date(date.setDate(date.getDate() + 3)),
 					path: '/',
 					secure: true,
 				});
 				//setRefreshToken(refreshToken);
+				console.log(accessToken);
 				navigate('/');
 			}
 		});
