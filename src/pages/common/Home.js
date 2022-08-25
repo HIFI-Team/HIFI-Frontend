@@ -12,6 +12,7 @@ const Home = () => {
       <button onClick={() => navigate('/login')}>로그인</button>
       <button onClick={() => navigate('/join')}>회원가입</button>
       <button onClick={() => navigate('/profile')}>내 정보</button>
+      <button onClick={() => navigate('/follow')}>팔로우 테스트</button>
     </>
   );
 };

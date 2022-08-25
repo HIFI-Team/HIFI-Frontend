@@ -5,6 +5,7 @@ import NotFound from './pages/common/NotFound';
 import Join from './pages/auth/Join';
 import Login from './pages/auth/Login';
 import Profile from './pages/user/Profile';
+import Follow from './pages/user/Follow';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Route path="/profile" element={<Profile />} />
       <Route path="/join" element={<Join />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/follow" element={<Follow />} />
 
       <Route path="/error" element={<NotFound />} />
       <Route path="*" element={<Navigate to="/error" />} />
