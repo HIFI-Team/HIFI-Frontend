@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReviewApi from '../../../apis/ReviewApi';
 import ReviewToReply from './ReviewToReply';
-import { useCookies } from 'react-cookie';
 
 export const Reviews = props => {
 	const storeId = props.postId;
@@ -17,7 +16,6 @@ export const Reviews = props => {
 	};
 
 	const onSubmit = event => {
-		//리다이렉트 안되도록
 		event.preventDefault();
 
 		newReview.content = content;
@@ -25,7 +23,7 @@ export const Reviews = props => {
 
 		const saveReview = async () => {
 			const response = await ReviewApi.requestSaveReview(newReview);
-			if (response.status == 200) {
+			if (response.status === 200) {
 				setContent('');
 				console.log(response);
 				props.refreshFunction();
@@ -59,9 +57,9 @@ export const Reviews = props => {
 				</button>
 			</form>
 			{/* review Lists */}
-			{console.log(props.ReviewLists)}
-			{props.ReviewLists &&
-				props.ReviewLists.map(
+			{console.log(props.ReviewList)}
+			{props.ReviewList &&
+				props.ReviewList.map(
 					(review, index) =>
 						!review.responseTo && <ReviewToReply key={index} review={review} postId={storeId} />,
 				)}

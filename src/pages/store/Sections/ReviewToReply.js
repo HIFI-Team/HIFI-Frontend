@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Comment, Avatar } from 'antd';
-import ReviewApi from '../../../apis/ReviewApi';
-import { useCookies } from 'react-cookie';
 import Reply from './Reply';
 // import LikeDislikes from "./LikeDislikes";
 
