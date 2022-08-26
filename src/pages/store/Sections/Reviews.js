@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReviewApi from '../../../apis/ReviewApi';
-import SingleReview from './SingleReview';
+import ReviewToReply from './ReviewToReply';
 import { useCookies } from 'react-cookie';
 
 export const Reviews = props => {
@@ -12,8 +12,6 @@ export const Reviews = props => {
 		setNewReview(props.newReview);
 	}, [props.newReview]);
 
-	console.log(props.ReviewLists);
-
 	const handleClick = event => {
 		setContent(event.currentTarget.value);
 	};
@@ -23,6 +21,7 @@ export const Reviews = props => {
 		event.preventDefault();
 
 		newReview.content = content;
+		console.log(newReview.user);
 
 		const saveReview = async () => {
 			const response = await ReviewApi.requestSaveReview(newReview);
@@ -64,16 +63,7 @@ export const Reviews = props => {
 			{props.ReviewLists &&
 				props.ReviewLists.map(
 					(review, index) =>
-						!review.responseTo && (
-							// <React.Fragment>
-							<SingleReview
-								key={index}
-								refreshFunction={props.refreshFunction}
-								review={review}
-								postId={storeId}
-							/>
-							// </React.Fragment>
-						),
+						!review.responseTo && <ReviewToReply key={index} review={review} postId={storeId} />,
 				)}
 		</div>
 	);

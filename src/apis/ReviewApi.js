@@ -1,8 +1,12 @@
 import axios from 'axios';
 const ReviewApi = {
 	requestAllReview: async id => {},
-	requestReviews: async id => {
-		const response = await axios.get('http://localhost:8000/store/' + id);
+	requestReview: async (id, accessToken) => {
+		const response = await axios.get('http://localhost:8000/review/' + id, {
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+			},
+		});
 		return response.data;
 	},
 	requestSaveReview: async body => {
