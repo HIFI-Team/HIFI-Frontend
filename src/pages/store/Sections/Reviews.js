@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReviewApi from '../../../apis/ReviewApi';
-import SingleReview from './Reply';
+import SingleReview from './SingleReview';
 import { useCookies } from 'react-cookie';
 
-export const Review = props => {
+export const Reviews = props => {
 	const storeId = props.postId;
 	const [content, setContent] = useState('');
 	const [newReview, setNewReview] = useState('');
+
+	useEffect(() => {
+		setNewReview(props.newReview);
+	}, [props.newReview]);
+
+	console.log(props.ReviewLists);
 
 	const handleClick = event => {
 		setContent(event.currentTarget.value);
@@ -16,10 +22,7 @@ export const Review = props => {
 		//리다이렉트 안되도록
 		event.preventDefault();
 
-		setNewReview(props.newReview);
 		newReview.content = content;
-
-		console.log(newReview);
 
 		const saveReview = async () => {
 			const response = await ReviewApi.requestSaveReview(newReview);
