@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReviewApi from '../../../apis/ReviewApi';
-import SingleReview from './SingleReview';
-import { useCookies } from 'react-cookie';
+import ReviewToReply from './ReviewToReply';
 
 export const Reviews = props => {
 	const storeId = props.postId;
@@ -12,21 +11,19 @@ export const Reviews = props => {
 		setNewReview(props.newReview);
 	}, [props.newReview]);
 
-	console.log(props.ReviewLists);
-
 	const handleClick = event => {
 		setContent(event.currentTarget.value);
 	};
 
 	const onSubmit = event => {
-		//리다이렉트 안되도록
 		event.preventDefault();
 
 		newReview.content = content;
+		console.log(newReview.user);
 
 		const saveReview = async () => {
 			const response = await ReviewApi.requestSaveReview(newReview);
-			if (response.status == 200) {
+			if (response.status === 200) {
 				setContent('');
 				console.log(response);
 				props.refreshFunction();
@@ -60,20 +57,11 @@ export const Reviews = props => {
 				</button>
 			</form>
 			{/* review Lists */}
-			{console.log(props.ReviewLists)}
-			{props.ReviewLists &&
-				props.ReviewLists.map(
+			{console.log(props.ReviewList)}
+			{props.ReviewList &&
+				props.ReviewList.map(
 					(review, index) =>
-						!review.responseTo && (
-							// <React.Fragment>
-							<SingleReview
-								key={index}
-								refreshFunction={props.refreshFunction}
-								review={review}
-								postId={storeId}
-							/>
-							// </React.Fragment>
-						),
+						!review.responseTo && <ReviewToReply key={index} review={review} postId={storeId} />,
 				)}
 		</div>
 	);

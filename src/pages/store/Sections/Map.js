@@ -11,7 +11,6 @@ const Map = props => {
 	const [position, setPosition] = useState();
 
 	const geocoder = new kakao.maps.services.Geocoder();
-	const infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
 
 	const mapOptions = {
 		center: '', // 지도의 중심좌표
