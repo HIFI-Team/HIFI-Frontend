@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import ReviewApi from '../../../apis/ReviewApi';
 import ReviewToReply from './ReviewToReply';
 import StarRating from './StarRating';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
+import { Typography } from 'antd';
+
+const { Title } = Typography;
 export const Reviews = props => {
   const storeId = props.postId;
   const [content, setContent] = useState('');
@@ -43,12 +46,12 @@ export const Reviews = props => {
       alert('별점을 선택해 주세요.');
       return;
     }
-    // console.log(newReview.user);
 
     const saveReview = async () => {
       const response = await ReviewApi.requestSaveReview(newReview);
       if (response && response.status === 200) {
         setContent('');
+        setStar();
         console.log(response);
         props.refreshFunction();
       } else {
@@ -61,10 +64,10 @@ export const Reviews = props => {
   return (
     <div>
       <br />
-      <p>Reviews</p>
+      <Title level={4}>Review</Title>
       <hr />
       {/* Root review Form */}
-      <StarRating getStarRating={getStarRating} />
+      <StarRating getStarRating={getStarRating} star={star} />
       <form style={{ display: 'flex' }} onSubmit={onSubmit}>
         <textarea
           style={{ width: '100%', borderRadius: '10px', resize: 'none' }}
@@ -86,6 +89,7 @@ export const Reviews = props => {
           Submit
         </button>
       </form>
+      <br />
       {/* review Lists */}
       {props.ReviewList &&
         props.ReviewList.map(

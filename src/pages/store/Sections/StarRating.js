@@ -7,6 +7,10 @@ const ARRAY = [0, 1, 2, 3, 4];
 function StarRating(props) {
   const [clicked, setClicked] = useState([false, false, false, false, false]);
 
+  useEffect(() => {
+    setClicked([false, false, false, false, false]);
+  }, [props.star]);
+
   const handleStarClick = index => {
     let clickStates = [...clicked];
     for (let i = 0; i < 5; i++) {
@@ -14,18 +18,7 @@ function StarRating(props) {
     }
     props.getStarRating(clickStates.filter(Boolean).length);
     setClicked(clickStates);
-    // console.log(clickStates.filter(Boolean).length);
   };
-
-  useEffect(() => {
-    sendReview();
-  }, [clicked]); //컨디마 컨디업
-
-  const sendReview = () => {
-    let score = clicked.filter(Boolean).length;
-    // console.log(score);
-  };
-
   return (
     <Wrap>
       <RatingText>평가하기</RatingText>
