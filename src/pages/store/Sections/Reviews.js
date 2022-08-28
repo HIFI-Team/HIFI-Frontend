@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import ReviewApi from '../../../apis/ReviewApi';
 import ReviewToReply from './ReviewToReply';
+import StarRating from './StarRating';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 export const Reviews = props => {
   const storeId = props.postId;
   const [content, setContent] = useState('');
   const [newReview, setNewReview] = useState('');
+  const [star, setStar] = useState('');
 
   const navigate = useNavigate();
+
+  const getStarRating = num => {
+    setStar(num);
+  };
 
   useEffect(() => {
     setNewReview(props.newReview);
@@ -31,6 +37,12 @@ export const Reviews = props => {
     event.preventDefault();
 
     if (newReview) newReview.content = content;
+    if (star) {
+      newReview.grade = star;
+    } else {
+      alert('별점을 선택해 주세요.');
+      return;
+    }
     // console.log(newReview.user);
 
     const saveReview = async () => {
@@ -52,6 +64,7 @@ export const Reviews = props => {
       <p>Reviews</p>
       <hr />
       {/* Root review Form */}
+      <StarRating getStarRating={getStarRating} />
       <form style={{ display: 'flex' }} onSubmit={onSubmit}>
         <textarea
           style={{ width: '100%', borderRadius: '10px', resize: 'none' }}
