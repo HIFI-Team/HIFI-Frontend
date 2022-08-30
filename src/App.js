@@ -6,7 +6,7 @@ import NotFound from './pages/common/NotFound';
 import Join from './pages/auth/Join';
 import Login from './pages/auth/Login';
 import Profile from './pages/user/Profile';
-import Follow from './pages/user/Follow';
+import Search from './pages/user/Search';
 import Maps from "./pages/store/Maps";
 import StoreDetail from "./pages/store/StoreDetail";
 
@@ -19,7 +19,7 @@ function App() {
       <Route path="/login" element={<Login />} />
 			<Route path="/store" element={<Maps />} />
 			<Route exact path="/store/:storeId" element={<StoreDetail />} />
-      <Route path="/follow" element={<Follow />} />
+      <Route path="/follow" element={<Search />} />
 
       <Route path="/error" element={<NotFound />} />
       <Route path="*" element={<Navigate to="/error" />} />

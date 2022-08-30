@@ -2,9 +2,16 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import NavBar from '../../components/NavBar';
 
-function Follow() {
+function Search() {
   const [name, setName] = useState('');
 
+  useEffect(() => {
+    const userData = async () => {
+      await axios
+        .get('http://localhost:8000/user/search')
+        .then()
+    }
+  })
   const config = {
     headers: {
       Authorization:
@@ -45,7 +52,20 @@ function Follow() {
         <br />
         <button onClick={submitHandler}>검색</button>
       </form>
+
+      <div className="w-full">
+        <table className="min-w-full">
+          <thead>
+            <tr>
+              <th>번호</th>
+              <th>test</th>
+            </tr>
+          </thead>
+
+          {}
+        </table>
+      </div>
     </div>
   );
 }
-export default Follow;
+export default Search;
