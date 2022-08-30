@@ -73,7 +73,6 @@ function NavBar() {
           </Navbar.Offcanvas>
         </Container>
       </Navbar>
-      )
     </>
   );
 }

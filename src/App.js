@@ -5,22 +5,26 @@ import Home from './pages/common/Home';
 import NotFound from './pages/common/NotFound';
 import Join from './pages/auth/Join';
 import Login from './pages/auth/Login';
-import Maps from './pages/store/Maps';
-import StoreDetail from './pages/store/StoreDetail';
+import Profile from './pages/user/Profile';
+import Search from './pages/user/Search';
+import Maps from "./pages/store/Maps";
+import StoreDetail from "./pages/store/StoreDetail";
+
 function App() {
-	return (
-		<Routes>
-			<Route path="/" element={<Home />} />
-			<Route path="/user" element={<Home />} />
-			<Route path="/join" element={<Join />} />
-			<Route path="/login" element={<Login />} />
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/profile" element={<Profile />} />
+      <Route path="/join" element={<Join />} />
+      <Route path="/login" element={<Login />} />
 			<Route path="/store" element={<Maps />} />
 			<Route exact path="/store/:storeId" element={<StoreDetail />} />
-			{/* <Route exact path="/store/:storeId" component={StoreDetail} /> */}
-			<Route path="/error" element={<NotFound />} />
-			<Route path="*" element={<Navigate to="/error" />} />
-		</Routes>
-	);
+      <Route path="/follow" element={<Search />} />
+
+      <Route path="/error" element={<NotFound />} />
+      <Route path="*" element={<Navigate to="/error" />} />
+    </Routes>
+  );
 }
 
 export default App;
