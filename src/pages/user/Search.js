@@ -28,7 +28,7 @@ function Search() {
     headers: {
       Authorization:
         `Bearer ` +
-        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJoaWZpIiwiaWF0IjoxNjYxODM2MTYxLCJzdWIiOiIyIiwicm9sZSI6IlJPTEVfVVNFUiIsImV4cCI6MTY2MTgzNzk2MX0.aO-hjGWKyKi6xf5URVsAgJoN6vP2gbk9yUdHhJspHb5Ffuu-hRRz_7kGZfJYh-sEZMP49wMslmhOMTZ_uT9ROQ',
+        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJoaWZpIiwiaWF0IjoxNjYxODM5NzE1LCJzdWIiOiIyIiwicm9sZSI6IlJPTEVfVVNFUiIsImV4cCI6MTY2MTg0MTUxNX0.LSGf6M9JM96h0qEqi36yEAcawp8rH2DCs0klqbTW7Zs8lnS_T1WNiUSQKw63Qe_yg7O5LFjKOk00CyDYw_Eq5w',
     },
   };
   const submitHandler = e => {
@@ -39,9 +39,13 @@ function Search() {
     e.preventDefault();
     setName(e.target.value);
   };
-  const followCheckTest = c => {
-    if (c) return '언팔로우';
-    else return '팔로우';
+  const clickFollow = e => {
+    e.preventDefault();
+    console.log('follow');
+  };
+  const clickUnFollow = e => {
+    e.preventDefault();
+    console.log('unfollow');
   };
   return (
     <div>
@@ -79,7 +83,11 @@ function Search() {
                   <td>{val.image}</td>
                   <td>{val.name}</td>
                   <td>
-                    <button>{followCheckTest(val.followed)}</button>
+                    {val.followed === true ? (
+                      <button onClick={clickUnFollow}>언팔로우</button>
+                    ) : (
+                      <button onClick={clickFollow}>팔로우</button>
+                    )}
                   </td>
                 </tr>
               </tbody>
