@@ -1,82 +1,117 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Comment, Avatar, Button, Input } from 'antd';
-import Axios from 'axios';
-// import { useSelector } from 'react-redux';
+import ReplyApi from '../../../apis/ReplyApi';
+import ReviewApi from '../../../apis/ReviewApi';
+import { useCookies } from 'react-cookie';
+import { useNavigate, useLocation } from 'react-router-dom';
 // import LikeDislikes from "./LikeDislikes";
+
 const { TextArea } = Input;
-function SingleComment(props) {
-	// const user = useSelector(state => state.user);
-	const [ReviewValue, setReviewValue] = useState('');
-	const [OpenReply, setOpenReply] = useState(false);
+function Reply(props) {
+  const [cookies] = useCookies(['accessToken']);
+  const navigate = useNavigate();
 
-	const handleChange = e => {
-		setReviewValue(e.currentTarget.value);
-	};
+  const [newReply, setNewReply] = useState('');
+  const [content, setContent] = useState('');
+  const [review, setReview] = useState('');
 
-	const openReply = () => {
-		setOpenReply(!OpenReply);
-	};
+  useEffect(() => {
+    getReviewData();
+  }, [props.review.id]);
 
-	const onSubmit = e => {
-		e.preventDefault();
+  const getReviewData = async () => {
+    const data = await ReviewApi.requestReview(
+      props.review.id,
+      cookies.accessToken
+    );
+    setReview(data);
+    setNewReply(data.newComment);
+  };
 
-		const variables = {
-			// writer: user.userData._id,
-			postId: props.postId,
-			responseTo: props.review._id,
-			content: ReviewValue,
-		};
+  // console.log(review);
 
-		// Axios.post('/api/review/saveComment', variables).then(response => {
-		// 	if (response.data.success) {
-		// 		setReviewValue('');
-		// 		setOpenReply(!OpenReply);
-		// 		props.refreshFunction(response.data.result);
-		// 	} else {
-		// 		alert('Failed to save Comment');
-		// 	}
-		// });
-	};
+  const handleChange = e => {
+    if (newReply) setContent(e.currentTarget.value);
+    else {
+      alert('로그인 후 사용가능합니다.');
+      navigate('/login', {
+        state: {
+          from: '/store/' + props.review.id,
+        },
+      });
+    }
+  };
 
-	const actions = [
-		// <LikeDislikes
-		//   comment
-		//   commentId={props.comment._id}
-		//   userId={localStorage.getItem("userId")}
-		// />,
-		<span onClick={openReply} key="comment-basic-reply-to">
-			Reply{' '}
-		</span>,
-	];
+  const onSubmit = event => {
+    event.preventDefault();
 
-	return (
-		<div>
-			<Comment
-				actions={actions}
-				author={props.review.user.email}
-				// avatar={<Avatar src={props.review.writer.image} alt="image" />}
-				content={<p>{props.review.content}</p>}
-			></Comment>
+    newReply.content = content;
+    console.log(newReply);
 
-			{OpenReply && (
-				<form style={{ display: 'flex' }} onSubmit={onSubmit}>
-					<TextArea
-						style={{ width: '80%', borderRadius: '5px', marginRight: '10px' }}
-						onChange={handleChange}
-						value={ReviewValue}
-						placeholder="write some reply"
-					/>
-					<br />
-					<Button
-						style={{ width: '10%', height: '52px', borderRadius: '10px', marginLeft: '10px' }}
-						onClick={onSubmit}
-					>
-						Submit
-					</Button>
-				</form>
-			)}
-		</div>
-	);
+    const saveReply = async () => {
+      const response = await ReplyApi.requestSaveReply(newReply);
+      if (response.status == 200) {
+        setContent('');
+        console.log(response);
+        getReviewData();
+      } else {
+        alert('댓글을 저장하지 못했습니다.');
+      }
+    };
+    saveReply();
+  };
+
+  const actions = [
+    // <LikeDislikes
+    //   comment
+    //   commentId={props.comment._id}
+    //   userId={localStorage.getItem("userId")}
+    // />,
+  ];
+
+  return (
+    <div>
+      <React.Fragment>
+        <form style={{ display: 'flex' }} onSubmit={onSubmit}>
+          <TextArea
+            style={{
+              width: '80%',
+              borderRadius: '5px',
+              marginRight: '10px',
+              marginLeft: '10px',
+            }}
+            onChange={handleChange}
+            value={content}
+            placeholder="write some reply"
+          />
+          <br />
+          <Button
+            style={{
+              width: '10%',
+              height: '52px',
+              borderRadius: '10px',
+              marginLeft: '10px',
+            }}
+            onClick={onSubmit}
+          >
+            Submit
+          </Button>
+        </form>
+        {review.comment &&
+          review.comment.map(
+            (reply, index) =>
+              !reply.responseTo && (
+                <Comment
+                  style={{ marginLeft: '30px' }}
+                  key={index}
+                  author={reply.user.email}
+                  content={<p>{reply.content}</p>}
+                ></Comment>
+              )
+          )}
+      </React.Fragment>
+    </div>
+  );
 }
 
-export default SingleComment;
+export default Reply;
