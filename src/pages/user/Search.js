@@ -4,14 +4,26 @@ import NavBar from '../../components/NavBar';
 
 function Search() {
   const [name, setName] = useState('');
+  const [lists, setLists] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPosts, setCurrentPosts] = useState([]);
+  const postsPerPage = 10;
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+
+  const [test, setTest] = useState(1);
 
   useEffect(() => {
     const userData = async () => {
-      await axios
-        .get('http://localhost:8000/user/search')
-        .then()
-    }
-  })
+      await axios.get('http://localhost:8000/user/search').then(res => {
+        setLists(res.data.data);
+        setCurrentPosts(res.data.data.slice(indexOfFirstPost, indexOfLastPost));
+        setCurrentPage(1);
+      });
+      console.log(lists);
+    };
+    userData();
+  }, [test]);
   const config = {
     headers: {
       Authorization:
@@ -21,16 +33,7 @@ function Search() {
   };
   const submitHandler = e => {
     e.preventDefault();
-    try {
-      const request = axios.post(
-        'http://localhost:8000/user/search',
-        { name: name },
-        config
-      );
-      console.log(request);
-    } catch (e) {
-      console.log(e);
-    }
+    setTest(test + 1);
   };
   const nameHandler = e => {
     e.preventDefault();
@@ -58,11 +61,26 @@ function Search() {
           <thead>
             <tr>
               <th>번호</th>
-              <th>test</th>
+              <th>이미지</th>
+              <th>이름</th>
+              <th>팔로우</th>
             </tr>
           </thead>
 
-          {}
+          {currentPosts.map((val, index) => {
+            return (
+              <tbody key={val.id}>
+                <tr>
+                  <td>{(currentPage - 1) * postsPerPage + index + 1}</td>
+                  <td>{val.image}</td>
+                  <td>{val.name}</td>
+                  <td>
+                    <button>팔로우</button>
+                  </td>
+                </tr>
+              </tbody>
+            );
+          })}
         </table>
       </div>
     </div>
