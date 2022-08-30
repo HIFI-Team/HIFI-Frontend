@@ -15,7 +15,7 @@ function Search() {
 
   useEffect(() => {
     const userData = async () => {
-      await axios.get('http://localhost:8000/user/search').then(res => {
+      await axios.get('http://localhost:8000/user/search', config).then(res => {
         setLists(res.data.data);
         setCurrentPosts(res.data.data.slice(indexOfFirstPost, indexOfLastPost));
         setCurrentPage(1);
@@ -28,7 +28,7 @@ function Search() {
     headers: {
       Authorization:
         `Bearer ` +
-        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJoaWZpIiwiaWF0IjoxNjYxNDQ5NDM0LCJzdWIiOiI1Iiwicm9sZSI6IlJPTEVfVVNFUiIsImV4cCI6MTY2MTQ1MTIzNH0.vIZnIi_msevCE5QgfuyLNN0iPD1aAABU7-rv5wZYrjrj7Yxf0r9J7bLUNLzJUA2nyQk8DIucNRfiIMjFhZj9pQ',
+        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJoaWZpIiwiaWF0IjoxNjYxODM2MTYxLCJzdWIiOiIyIiwicm9sZSI6IlJPTEVfVVNFUiIsImV4cCI6MTY2MTgzNzk2MX0.aO-hjGWKyKi6xf5URVsAgJoN6vP2gbk9yUdHhJspHb5Ffuu-hRRz_7kGZfJYh-sEZMP49wMslmhOMTZ_uT9ROQ',
     },
   };
   const submitHandler = e => {
@@ -38,6 +38,10 @@ function Search() {
   const nameHandler = e => {
     e.preventDefault();
     setName(e.target.value);
+  };
+  const followCheckTest = c => {
+    if (c) return '언팔로우';
+    else return '팔로우';
   };
   return (
     <div>
@@ -75,7 +79,7 @@ function Search() {
                   <td>{val.image}</td>
                   <td>{val.name}</td>
                   <td>
-                    <button>팔로우</button>
+                    <button>{followCheckTest(val.followed)}</button>
                   </td>
                 </tr>
               </tbody>
