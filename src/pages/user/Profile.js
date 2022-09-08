@@ -6,7 +6,6 @@ import { useCookies } from 'react-cookie';
 import ProfileApi from '../../apis/ProfileApi';
 
 function Profile() {
-  let [profile, setProfile] = useState(null);
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -14,17 +13,8 @@ function Profile() {
   const [anonymous, setAnonymous] = useState('');
   const [cookies] = useCookies(['accessToken']);
 
-  const profileTest = ['name', 'description', 'image', 'anonymous'];
-  const config = {
-    headers: {
-      Authorization:
-        `Bearer ` +
-        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJoaWZpIiwiaWF0IjoxNjYyNjI3NTUzLCJzdWIiOiJtaW5zZW9rQG5hdmVyLmNvbSIsInJvbGUiOiJbUk9MRV9VU0VSXSIsImV4cCI6MTY2MjYyOTM1M30.5Qd1_6BZAw9m4m7Bt8GZnFRQOIInJFEvyx37GGNhj9sZny1fgGKjHFLRipHtUADIS2YnaSSGDI4Kj-OdgYWuzw',
-    },
-  };
   const refresh = async () => {
     try {
-      // setCookies(useCookies(['accessToken']));
       const response = await ProfileApi.requestProfile(cookies.accessToken);
       setEmail(response.data.data.email);
       setName(response.data.data.name);
@@ -40,20 +30,6 @@ function Profile() {
   const submitHandler = async () => {
     const profileDto = { email, name, description, image, anonymous };
     try {
-      // setCookies(useCookies(['accessToken']));
-
-      // const request = await axios.post(
-      //   'http://localhost:8000/user/update',
-      //   {
-      //     name: profileDto.name,
-      //     description: profileDto.description,
-      //     image: profileDto.image,
-      //     anonymous: profileDto.anonymous,
-      //   },
-      //   config
-      // );
-
-      console.log(profileDto);
       const request = await ProfileApi.requestUpdate(profileDto);
       console.log(request);
     } catch (e) {

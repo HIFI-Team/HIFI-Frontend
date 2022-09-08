@@ -18,12 +18,6 @@ function Search() {
 
   useEffect(() => {
     const userData = async () => {
-      // await axios.get('http://localhost:8000/user/search', config).then(res => {
-      //   setLists(res.data.data);
-      //   setCurrentPosts(res.data.data.slice(indexOfFirstPost, indexOfLastPost));
-      //   setCurrentPage(1);
-      // });
-      // console.log(lists);
       const response = await SearchApi.requestAllUser(cookies.accessToken);
       setLists(response.data.data);
       setCurrentPosts(
@@ -33,13 +27,6 @@ function Search() {
     };
     userData();
   }, [test]);
-  const config = {
-    headers: {
-      Authorization:
-        `Bearer ` +
-        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJoaWZpIiwiaWF0IjoxNjYxODM5NzE1LCJzdWIiOiIyIiwicm9sZSI6IlJPTEVfVVNFUiIsImV4cCI6MTY2MTg0MTUxNX0.LSGf6M9JM96h0qEqi36yEAcawp8rH2DCs0klqbTW7Zs8lnS_T1WNiUSQKw63Qe_yg7O5LFjKOk00CyDYw_Eq5w',
-    },
-  };
   const submitHandler = e => {
     e.preventDefault();
     setTest(test + 1);
