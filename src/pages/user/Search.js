@@ -2,10 +2,12 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import NavBar from '../../components/NavBar';
 import SearchApi from '../../apis/SearchApi';
+import FollowApi from '../../apis/FollowApi';
 import { useCookies } from 'react-cookie';
 
 function Search() {
   const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [cookies] = useCookies(['accessToken']);
   const [lists, setLists] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -20,6 +22,10 @@ function Search() {
     const userData = async () => {
       const response = await SearchApi.requestAllUser(cookies.accessToken);
       setLists(response.data.data);
+
+      const testEmail = 'minseok@naver.com';
+      setEmail(testEmail);
+
       setCurrentPosts(
         response.data.data.slice(indexOfFirstPost, indexOfLastPost)
       );
@@ -35,13 +41,14 @@ function Search() {
     e.preventDefault();
     setName(e.target.value);
   };
-  const clickFollow = e => {
+  const clickFollow = (toEmail, e) => {
     e.preventDefault();
-    console.log('follow');
+    const response = FollowApi.requestFollow(email, toEmail);
   };
-  const clickUnFollow = e => {
+  const clickUnFollow = (toEmail, e) => {
     e.preventDefault();
-    console.log('unfollow');
+    console.log(email, toEmail);
+    const response = FollowApi.requestUnFollow(email, toEmail);
   };
   return (
     <div>
@@ -80,9 +87,21 @@ function Search() {
                   <td>{val.name}</td>
                   <td>
                     {val.followed === true ? (
-                      <button onClick={clickUnFollow}>언팔로우</button>
+                      <button
+                        onClick={e => {
+                          clickUnFollow(val.email, e);
+                        }}
+                      >
+                        언팔로우
+                      </button>
                     ) : (
-                      <button onClick={clickFollow}>팔로우</button>
+                      <button
+                        onClick={e => {
+                          clickFollow(val.email, e);
+                        }}
+                      >
+                        팔로우
+                      </button>
                     )}
                   </td>
                 </tr>
