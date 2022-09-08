@@ -30,6 +30,7 @@ function Profile() {
       setName(response.data.data.name);
       setDescription(response.data.data.description);
       setImage(response.data.data.image);
+      console.log(response.data.data);
       if (response.data.data.anonymous) setAnonymous('예');
       else setAnonymous('아니오');
     } catch (e) {

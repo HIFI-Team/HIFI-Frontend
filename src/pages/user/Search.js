@@ -1,9 +1,12 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import NavBar from '../../components/NavBar';
+import SearchApi from '../../apis/SearchApi';
+import { useCookies } from 'react-cookie';
 
 function Search() {
   const [name, setName] = useState('');
+  const [cookies] = useCookies(['accessToken']);
   const [lists, setLists] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPosts, setCurrentPosts] = useState([]);
@@ -15,12 +18,18 @@ function Search() {
 
   useEffect(() => {
     const userData = async () => {
-      await axios.get('http://localhost:8000/user/search', config).then(res => {
-        setLists(res.data.data);
-        setCurrentPosts(res.data.data.slice(indexOfFirstPost, indexOfLastPost));
-        setCurrentPage(1);
-      });
-      console.log(lists);
+      // await axios.get('http://localhost:8000/user/search', config).then(res => {
+      //   setLists(res.data.data);
+      //   setCurrentPosts(res.data.data.slice(indexOfFirstPost, indexOfLastPost));
+      //   setCurrentPage(1);
+      // });
+      // console.log(lists);
+      const response = await SearchApi.requestAllUser(cookies.accessToken);
+      setLists(response.data.data);
+      setCurrentPosts(
+        response.data.data.slice(indexOfFirstPost, indexOfLastPost)
+      );
+      setCurrentPage(1);
     };
     userData();
   }, [test]);
