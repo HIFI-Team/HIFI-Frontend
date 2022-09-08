@@ -2,50 +2,58 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import NavBar from '../../components/NavBar';
 import ProfileDto from '../../components/ProfileDto';
+import { useCookies } from 'react-cookie';
+import ProfileApi from '../../apis/ProfileApi';
 
 function Profile() {
   let [profile, setProfile] = useState(null);
+  const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [image, setImage] = useState('');
   const [anonymous, setAnonymous] = useState('');
+  const [cookies] = useCookies(['accessToken']);
 
   const profileTest = ['name', 'description', 'image', 'anonymous'];
   const config = {
     headers: {
       Authorization:
         `Bearer ` +
-        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJoaWZpIiwiaWF0IjoxNjYxODM2MTYxLCJzdWIiOiIyIiwicm9sZSI6IlJPTEVfVVNFUiIsImV4cCI6MTY2MTgzNzk2MX0.aO-hjGWKyKi6xf5URVsAgJoN6vP2gbk9yUdHhJspHb5Ffuu-hRRz_7kGZfJYh-sEZMP49wMslmhOMTZ_uT9ROQ',
+        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJoaWZpIiwiaWF0IjoxNjYyNjI3NTUzLCJzdWIiOiJtaW5zZW9rQG5hdmVyLmNvbSIsInJvbGUiOiJbUk9MRV9VU0VSXSIsImV4cCI6MTY2MjYyOTM1M30.5Qd1_6BZAw9m4m7Bt8GZnFRQOIInJFEvyx37GGNhj9sZny1fgGKjHFLRipHtUADIS2YnaSSGDI4Kj-OdgYWuzw',
     },
   };
   const refresh = async () => {
     try {
-      const response = await axios.get(
-        'http://localhost:8000/user/profile',
-        config
-      );
-      setName(response.data.name);
-      setDescription(response.data.description);
-      setImage(response.data.image);
-      if (response.data.anonymous) setAnonymous('예');
+      // setCookies(useCookies(['accessToken']));
+      const response = await ProfileApi.requestProfile(cookies.accessToken);
+      setEmail(response.data.data.email);
+      setName(response.data.data.name);
+      setDescription(response.data.data.description);
+      setImage(response.data.data.image);
+      if (response.data.data.anonymous) setAnonymous('예');
       else setAnonymous('아니오');
     } catch (e) {
       console.log(e, 'A');
     }
   };
   const submitHandler = async () => {
-    const profileDto = { name, description, image, anonymous };
+    const profileDto = { email, name, description, image, anonymous };
     try {
-      const request = await axios.post(
-        'http://localhost:8000/user/update',
-        {
-          name: profileDto.name,
-          description: profileDto.description,
-          image: profileDto.image,
-          anonymous: profileDto.anonymous,
-        },
-        config
-      );
+      // setCookies(useCookies(['accessToken']));
+
+      // const request = await axios.post(
+      //   'http://localhost:8000/user/update',
+      //   {
+      //     name: profileDto.name,
+      //     description: profileDto.description,
+      //     image: profileDto.image,
+      //     anonymous: profileDto.anonymous,
+      //   },
+      //   config
+      // );
+
+      console.log(profileDto);
+      const request = await ProfileApi.requestUpdate(profileDto);
       console.log(request);
     } catch (e) {
       console.log(e);
