@@ -15,6 +15,7 @@ const Home = () => {
       <button onClick={() => navigate('/follow')}>팔로우 테스트</button>
       <button onClick={() => navigate('/user')}>내 정보</button>
       <button onClick={() => navigate('/store')}>지도</button>
+      <button onClick={() => navigate('/login/kakao')}>카카오 로그인</button>
     </>
   );
 };
