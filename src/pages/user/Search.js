@@ -4,6 +4,7 @@ import NavBar from '../../components/NavBar';
 import SearchApi from '../../apis/SearchApi';
 import FollowApi from '../../apis/FollowApi';
 import { useCookies } from 'react-cookie';
+import ProfileApi from '../../apis/ProfileApi';
 
 function Search() {
   const [name, setName] = useState('');
@@ -23,8 +24,8 @@ function Search() {
       const response = await SearchApi.requestAllUser(cookies.accessToken);
       setLists(response.data.data);
 
-      const testEmail = 'minseok@naver.com';
-      setEmail(testEmail);
+      const myEmail = await ProfileApi.requestProfile(cookies.accessToken);
+      setEmail(myEmail.data.data.email);
 
       setCurrentPosts(
         response.data.data.slice(indexOfFirstPost, indexOfLastPost)
