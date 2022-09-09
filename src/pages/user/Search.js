@@ -42,14 +42,16 @@ function Search() {
     e.preventDefault();
     setName(e.target.value);
   };
-  const clickFollow = (toEmail, e) => {
+  const clickFollow = async (toEmail, e) => {
     e.preventDefault();
-    const response = FollowApi.requestFollow(email, toEmail);
+    const response = await FollowApi.requestFollow(email, toEmail);
+    setTest(test + 1);
   };
-  const clickUnFollow = (toEmail, e) => {
+  const clickUnFollow = async (toEmail, e) => {
     e.preventDefault();
     console.log(email, toEmail);
-    const response = FollowApi.requestUnFollow(email, toEmail);
+    const response = await FollowApi.requestUnFollow(email, toEmail);
+    setTest(test + 1);
   };
   return (
     <div>
