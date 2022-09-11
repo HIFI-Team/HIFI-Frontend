@@ -17,7 +17,7 @@ function Search() {
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
 
-  const [test, setTest] = useState(1);
+  const [refresh, setRefresh] = useState(1);
 
   useEffect(() => {
     const userData = async () => {
@@ -33,10 +33,10 @@ function Search() {
       setCurrentPage(1);
     };
     userData();
-  }, [test]);
+  }, [refresh]);
   const submitHandler = e => {
     e.preventDefault();
-    setTest(test + 1);
+    setRefresh(refresh + 1);
   };
   const nameHandler = e => {
     e.preventDefault();
@@ -45,13 +45,13 @@ function Search() {
   const clickFollow = async (toEmail, e) => {
     e.preventDefault();
     const response = await FollowApi.requestFollow(email, toEmail);
-    setTest(test + 1);
+    setRefresh(refresh + 1);
   };
   const clickUnFollow = async (toEmail, e) => {
     e.preventDefault();
     console.log(email, toEmail);
     const response = await FollowApi.requestUnFollow(email, toEmail);
-    setTest(test + 1);
+    setRefresh(refresh + 1);
   };
   return (
     <div>

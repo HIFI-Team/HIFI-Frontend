@@ -4,12 +4,15 @@ import NavBar from '../../components/NavBar';
 import ProfileDto from '../../components/ProfileDto';
 import { useCookies } from 'react-cookie';
 import ProfileApi from '../../apis/ProfileApi';
+import { Avatar } from 'antd';
 
 function Profile() {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState(
+    'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
+  );
   const [anonymous, setAnonymous] = useState('');
   const [cookies] = useCookies(['accessToken']);
 
@@ -19,7 +22,7 @@ function Profile() {
       setEmail(response.data.data.email);
       setName(response.data.data.name);
       setDescription(response.data.data.description);
-      setImage(response.data.data.image);
+      if (response.data.data.image) setImage(response.data.data.image);
       console.log(response.data.data);
       if (response.data.data.anonymous) setAnonymous('예');
       else setAnonymous('아니오');
@@ -60,7 +63,23 @@ function Profile() {
       <NavBar />
       <h1>{name}님의 프로필</h1>
       <h3>프로필 사진</h3>
-      {image}
+      <div>
+        {image && (
+          <img
+            alt="sample"
+            src={image}
+            width={200}
+            style={{ margin: 'auto' }}
+          />
+        )}
+      </div>
+      {/*<div>*/}
+      {/*  <Avatar>*/}
+      {/*    src={image}*/}
+      {/*    style={{ margin: '20px' }}*/}
+      {/*    size={200}*/}
+      {/*  </Avatar>*/}
+      {/*</div>*/}
       <h3>소개</h3>
       {description}
       <h3>비공개 여부</h3>
@@ -88,13 +107,7 @@ function Profile() {
         />
         <br />
         <label for="image">프로필 사진</label>
-        <input
-          id="image"
-          type="link"
-          value={image}
-          onChange={imageHandler}
-          placeholder="이미지"
-        />
+        <button onClick={imageHandler}>업로드</button>
         <br />
         <label for="anonymous">비공개 여부</label>
         <input
