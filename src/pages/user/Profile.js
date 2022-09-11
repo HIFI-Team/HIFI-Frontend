@@ -1,5 +1,4 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import NavBar from '../../components/NavBar';
 import ProfileDto from '../../components/ProfileDto';
 import { useCookies } from 'react-cookie';
@@ -10,11 +9,12 @@ function Profile() {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [image, setImage] = useState(
-    'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
-  );
+  const [image, setImage] = useState(null);
+  // 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
+  // );
   const [anonymous, setAnonymous] = useState('');
   const [cookies] = useCookies(['accessToken']);
+  const fileInput = useRef(null);
 
   const refresh = async () => {
     try {
@@ -49,7 +49,16 @@ function Profile() {
   };
   const imageHandler = e => {
     e.preventDefault();
-    setImage(e.target.value);
+    const reader = new FileReader();
+    const file = e.target.files[0];
+    reader.onload = () => {
+      if (reader.readyState === 2) setImage(reader.result);
+      console.log(image);
+    };
+    reader.readAsDataURL(file);
+    console.log('image ' + image);
+    console.log('fileInput ' + fileInput);
+    // setImage(e.target.value);
   };
   const anonymousHandler = e => {
     e.preventDefault();
@@ -62,16 +71,19 @@ function Profile() {
     <div>
       <NavBar />
       <h1>{name}님의 프로필</h1>
-      <h3>프로필 사진</h3>
+      {/*<h3>프로필 사진</h3>*/}
       <div>
         {image && (
           <img
             alt="sample"
             src={image}
             width={200}
-            style={{ margin: 'auto' }}
+            height={200}
+            style={{ margin: '10px', borderRadius: 110 }}
+            onClick={() => console.log(image)}
           />
         )}
+        {image}
       </div>
       {/*<div>*/}
       {/*  <Avatar>*/}
@@ -80,8 +92,10 @@ function Profile() {
       {/*    size={200}*/}
       {/*  </Avatar>*/}
       {/*</div>*/}
-      <h3>소개</h3>
-      {description}
+      <div>
+        <h3>소개</h3>
+        {description}
+      </div>
       <h3>비공개 여부</h3>
       {anonymous}
       <br />
@@ -107,7 +121,15 @@ function Profile() {
         />
         <br />
         <label for="image">프로필 사진</label>
-        <button onClick={imageHandler}>업로드</button>
+        {/*<button onClick={imageHandler}>업로드</button>*/}
+        <input
+          type="file"
+          // style={{ display: 'none' }}
+          accept="image/jpg,image/png,image/jpeg"
+          name="profile_img"
+          onChange={imageHandler}
+          ref={fileInput}
+        />
         <br />
         <label for="anonymous">비공개 여부</label>
         <input

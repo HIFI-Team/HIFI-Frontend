@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import NavBar from '../../components/NavBar';
 import SearchApi from '../../apis/SearchApi';
@@ -86,7 +85,17 @@ function Search() {
               <tbody key={val.id}>
                 <tr>
                   <td>{(currentPage - 1) * postsPerPage + index + 1}</td>
-                  <td>{val.image}</td>
+                  <td>
+                    {val.image && (
+                      <img
+                        alt="sample"
+                        src={val.image}
+                        height={60}
+                        width={60}
+                        style={{ margin: '5px', borderRadius: 40 }}
+                      />
+                    )}
+                  </td>
                   <td>{val.name}</td>
                   <td>
                     {val.followed === true ? (
