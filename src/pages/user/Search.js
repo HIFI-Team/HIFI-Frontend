@@ -1,9 +1,14 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import NavBar from '../../components/NavBar';
+import SearchApi from '../../apis/SearchApi';
+import FollowApi from '../../apis/FollowApi';
+import { useCookies } from 'react-cookie';
+import ProfileApi from '../../apis/ProfileApi';
 
 function Search() {
   const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [cookies] = useCookies(['accessToken']);
   const [lists, setLists] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPosts, setCurrentPosts] = useState([]);
@@ -11,33 +16,41 @@ function Search() {
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
 
-  const [test, setTest] = useState(1);
+  const [refresh, setRefresh] = useState(1);
 
   useEffect(() => {
     const userData = async () => {
-      await axios.get('http://localhost:8000/user/search').then(res => {
-        setLists(res.data.data);
-        setCurrentPosts(res.data.data.slice(indexOfFirstPost, indexOfLastPost));
-        setCurrentPage(1);
-      });
-      console.log(lists);
+      const response = await SearchApi.requestAllUser(cookies.accessToken);
+      setLists(response.data.data);
+
+      const myEmail = await ProfileApi.requestProfile(cookies.accessToken);
+      setEmail(myEmail.data.data.email);
+
+      setCurrentPosts(
+        response.data.data.slice(indexOfFirstPost, indexOfLastPost)
+      );
+      setCurrentPage(1);
     };
     userData();
-  }, [test]);
-  const config = {
-    headers: {
-      Authorization:
-        `Bearer ` +
-        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJoaWZpIiwiaWF0IjoxNjYxNDQ5NDM0LCJzdWIiOiI1Iiwicm9sZSI6IlJPTEVfVVNFUiIsImV4cCI6MTY2MTQ1MTIzNH0.vIZnIi_msevCE5QgfuyLNN0iPD1aAABU7-rv5wZYrjrj7Yxf0r9J7bLUNLzJUA2nyQk8DIucNRfiIMjFhZj9pQ',
-    },
-  };
+  }, [refresh]);
   const submitHandler = e => {
     e.preventDefault();
-    setTest(test + 1);
+    setRefresh(refresh + 1);
   };
   const nameHandler = e => {
     e.preventDefault();
     setName(e.target.value);
+  };
+  const clickFollow = async (toEmail, e) => {
+    e.preventDefault();
+    const response = await FollowApi.requestFollow(email, toEmail);
+    setRefresh(refresh + 1);
+  };
+  const clickUnFollow = async (toEmail, e) => {
+    e.preventDefault();
+    console.log(email, toEmail);
+    const response = await FollowApi.requestUnFollow(email, toEmail);
+    setRefresh(refresh + 1);
   };
   return (
     <div>
@@ -72,10 +85,36 @@ function Search() {
               <tbody key={val.id}>
                 <tr>
                   <td>{(currentPage - 1) * postsPerPage + index + 1}</td>
-                  <td>{val.image}</td>
+                  <td>
+                    {val.image && (
+                      <img
+                        alt="sample"
+                        src={val.image}
+                        height={60}
+                        width={60}
+                        style={{ margin: '5px', borderRadius: 40 }}
+                      />
+                    )}
+                  </td>
                   <td>{val.name}</td>
                   <td>
-                    <button>팔로우</button>
+                    {val.followed === true ? (
+                      <button
+                        onClick={e => {
+                          clickUnFollow(val.email, e);
+                        }}
+                      >
+                        언팔로우
+                      </button>
+                    ) : (
+                      <button
+                        onClick={e => {
+                          clickFollow(val.email, e);
+                        }}
+                      >
+                        팔로우
+                      </button>
+                    )}
                   </td>
                 </tr>
               </tbody>

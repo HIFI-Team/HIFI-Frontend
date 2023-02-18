@@ -1,51 +1,46 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import NavBar from '../../components/NavBar';
 import ProfileDto from '../../components/ProfileDto';
+import { useCookies } from 'react-cookie';
+import ProfileApi from '../../apis/ProfileApi';
+import { Avatar } from 'antd';
 
 function Profile() {
-  let [profile, setProfile] = useState(null);
+  const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState(
+    'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
+  );
   const [anonymous, setAnonymous] = useState('');
+  const [follower, setFollower] = useState(0);
+  const [following, setFollowing] = useState(0);
+  const [cookies] = useCookies(['accessToken']);
+  const fileInput = useRef(null);
 
-  const profileTest = ['name', 'description', 'image', 'anonymous'];
-  const config = {
-    headers: {
-      Authorization:
-        `Bearer ` +
-        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJoaWZpIiwiaWF0IjoxNjYxNDQ5NDM0LCJzdWIiOiI1Iiwicm9sZSI6IlJPTEVfVVNFUiIsImV4cCI6MTY2MTQ1MTIzNH0.vIZnIi_msevCE5QgfuyLNN0iPD1aAABU7-rv5wZYrjrj7Yxf0r9J7bLUNLzJUA2nyQk8DIucNRfiIMjFhZj9pQ',
-    },
-  };
   const refresh = async () => {
     try {
-      const response = await axios.get(
-        'http://localhost:8000/user/profile',
-        config
-      );
-      setName(response.data.name);
-      setDescription(response.data.description);
-      setImage(response.data.image);
-      if (response.data.anonymous) setAnonymous('예');
+      const response = await ProfileApi.requestProfile(cookies.accessToken);
+      setEmail(response.data.data.email);
+      setName(response.data.data.name);
+      setDescription(response.data.data.description);
+      if (response.data.data.image) setImage(response.data.data.image);
+      console.log(response.data.data);
+      if (response.data.data.anonymous) setAnonymous('예');
       else setAnonymous('아니오');
+
+      // 0일때 처리 해야함
+      setFollowing(response.data.data.following);
+      setFollower(response.data.data.follower);
     } catch (e) {
       console.log(e, 'A');
     }
   };
   const submitHandler = async () => {
-    const profileDto = { name, description, image, anonymous };
+    const profileDto = { email, name, description, image, anonymous };
+
     try {
-      const request = await axios.post(
-        'http://localhost:8000/user/update',
-        {
-          name: profileDto.name,
-          description: profileDto.description,
-          image: profileDto.image,
-          anonymous: profileDto.anonymous,
-        },
-        config
-      );
+      const request = await ProfileApi.requestUpdate(profileDto);
       console.log(request);
     } catch (e) {
       console.log(e);
@@ -61,7 +56,16 @@ function Profile() {
   };
   const imageHandler = e => {
     e.preventDefault();
-    setImage(e.target.value);
+    const reader = new FileReader();
+    const file = e.target.files[0];
+    reader.onload = () => {
+      if (reader.readyState === 2) setImage(reader.result);
+      console.log(image);
+    };
+    reader.readAsDataURL(file);
+    console.log('image ' + image);
+    console.log('fileInput ' + fileInput);
+    // setImage(e.target.value);
   };
   const anonymousHandler = e => {
     e.preventDefault();
@@ -74,12 +78,47 @@ function Profile() {
     <div>
       <NavBar />
       <h1>{name}님의 프로필</h1>
-      <h3>프로필 사진</h3>
-      {image}
-      <h3>소개</h3>
-      {description}
-      <h3>비공개 여부</h3>
-      {anonymous}
+      {/*<h3>프로필 사진</h3>*/}
+      <div>
+        {image && (
+          <img
+            alt="sample"
+            src={image}
+            width={200}
+            height={200}
+            style={{ margin: '10px', borderRadius: 110 }}
+            onClick={() => console.log(image)}
+          />
+        )}
+        {/*{image}*/}
+      </div>
+      {/*<div>*/}
+      {/*  <Avatar>*/}
+      {/*    src={image}*/}
+      {/*    style={{ margin: '20px' }}*/}
+      {/*    size={200}*/}
+      {/*  </Avatar>*/}
+      {/*</div>*/}
+      <div>
+        <h3>소개</h3>
+        {description}
+      </div>
+      <br />
+      <div>
+        <h3>비공개 여부</h3>
+        {anonymous}
+      </div>
+      <br />
+      <div>
+        <h3>팔로워</h3>
+        {follower}명
+      </div>
+      <br />
+      <div>
+        <h3>팔로우</h3>
+        {following}명
+      </div>
+      <br />
       <br />
       <br />
       <h1>프로필 변경하기</h1>
@@ -103,12 +142,14 @@ function Profile() {
         />
         <br />
         <label for="image">프로필 사진</label>
+        {/*<button onClick={imageHandler}>업로드</button>*/}
         <input
-          id="image"
-          type="link"
-          value={image}
+          type="file"
+          // style={{ display: 'none' }}
+          accept="image/jpg,image/png,image/jpeg"
+          name="profile_img"
           onChange={imageHandler}
-          placeholder="이미지"
+          ref={fileInput}
         />
         <br />
         <label for="anonymous">비공개 여부</label>
