@@ -11,6 +11,7 @@ import Profile from './pages/user/Profile';
 import Search from './pages/user/Search';
 import Maps from './pages/store/Maps';
 import StoreDetail from './pages/store/StoreDetail';
+import Pheed from './pages/user/Pheed';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
       <Route path="/store" element={<Maps />} />
       <Route exact path="/store/:storeId" element={<StoreDetail />} />
       <Route path="/follow" element={<Search />} />
+      <Route path="/pheed" element={<Pheed />} />
 
       <Route path="/error" element={<NotFound />} />
       <Route path="*" element={<Navigate to="/error" />} />

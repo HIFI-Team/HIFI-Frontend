@@ -9,10 +9,12 @@ function Profile() {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [image, setImage] = useState(null);
-  // 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
-  // );
+  const [image, setImage] = useState(
+    'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'
+  );
   const [anonymous, setAnonymous] = useState('');
+  const [follower, setFollower] = useState(0);
+  const [following, setFollowing] = useState(0);
   const [cookies] = useCookies(['accessToken']);
   const fileInput = useRef(null);
 
@@ -26,12 +28,17 @@ function Profile() {
       console.log(response.data.data);
       if (response.data.data.anonymous) setAnonymous('예');
       else setAnonymous('아니오');
+
+      // 0일때 처리 해야함
+      setFollowing(response.data.data.following);
+      setFollower(response.data.data.follower);
     } catch (e) {
       console.log(e, 'A');
     }
   };
   const submitHandler = async () => {
     const profileDto = { email, name, description, image, anonymous };
+
     try {
       const request = await ProfileApi.requestUpdate(profileDto);
       console.log(request);
@@ -83,7 +90,7 @@ function Profile() {
             onClick={() => console.log(image)}
           />
         )}
-        {image}
+        {/*{image}*/}
       </div>
       {/*<div>*/}
       {/*  <Avatar>*/}
@@ -96,8 +103,22 @@ function Profile() {
         <h3>소개</h3>
         {description}
       </div>
-      <h3>비공개 여부</h3>
-      {anonymous}
+      <br />
+      <div>
+        <h3>비공개 여부</h3>
+        {anonymous}
+      </div>
+      <br />
+      <div>
+        <h3>팔로워</h3>
+        {follower}명
+      </div>
+      <br />
+      <div>
+        <h3>팔로우</h3>
+        {following}명
+      </div>
+      <br />
       <br />
       <br />
       <h1>프로필 변경하기</h1>
