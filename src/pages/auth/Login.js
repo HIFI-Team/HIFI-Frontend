@@ -1,11 +1,13 @@
 import NavBar from '../../components/NavBar';
 import AuthApi from '../../apis/AuthApi';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 // import styled from 'styled-components';
 
 const Join = () => {
+  const location = useLocation();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -30,14 +32,20 @@ const Join = () => {
       if (res.status === 200) {
         console.log('로그인 성공');
         const date = new Date();
-        const { accessToken } = res.data;
+        const { accessToken } = res.data.data;
         setAccessToken('accessToken', accessToken, {
           expires: new Date(date.setDate(date.getDate() + 3)),
           path: '/',
           secure: true,
         });
         //setRefreshToken(refreshToken);
-        navigate('/');
+        console.log(accessToken);
+
+        if (location.state && location.state.from) {
+          navigate(location.state.from);
+        } else {
+          navigate('/');
+        }
       }
     });
   };
@@ -47,7 +55,7 @@ const Join = () => {
       <NavBar />
       <h1>로그인 페이지 입니다</h1>
       <form onSubmit={submitHandler}>
-        <label for="email">아이디</label>
+        <label htmlFor="email">아이디</label>
         <input
           id="email"
           type="email"
@@ -56,7 +64,7 @@ const Join = () => {
           placeholder="이메일"
         />
         <br />
-        <label for="password">패스워드</label>
+        <label htmlFor="password">패스워드</label>
         <input
           id="password"
           type="password"
